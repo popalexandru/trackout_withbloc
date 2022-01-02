@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:trackout_fl_bloc/components/loading_widget.dart';
+import 'package:trackout_fl_bloc/cubit/ongoing_workout_cubit.dart';
 import 'package:trackout_fl_bloc/cubit/workout_cubit.dart';
 import 'package:trackout_fl_bloc/data/states/home_workout_obj.dart';
 import 'package:trackout_fl_bloc/repository/workout_repository.dart';
@@ -76,6 +77,7 @@ class _HomeViewState extends State<HomeView> {
                   case WorkoutState.success:
                     if (state.workoutResponse != null) {
                       /* pass the workout object to workout viewer */
+                      context.read<OngoingWorkoutCubit>().startWorkout(state.workoutResponse!.workout!);
                       return WorkoutView(
                           workoutResponse: state.workoutResponse!);
                     } else {

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:trackout_fl_bloc/components/no_exercices.dart';
 import 'package:trackout_fl_bloc/components/show_exercices.dart';
 import 'package:trackout_fl_bloc/components/water_widget.dart';
+import 'package:trackout_fl_bloc/cubit/ongoing_workout_cubit.dart';
 import 'package:trackout_fl_bloc/data/models/exercice.dart';
 import 'package:trackout_fl_bloc/data/models/responses/workout_response.dart';
 import 'package:trackout_fl_bloc/data/models/workout.dart';
@@ -16,12 +18,14 @@ class WorkoutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ExerciceWrapper(exercicesList: workoutResponse.workout!.exerciceList!),
-        StartWorkout(workout: workoutResponse.workout!, exercicesList: workoutResponse.workout!.exerciceList!),
-        ShowWater(waterQty: workoutResponse.workout!.waterQty)
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ExerciceWrapper(exercicesList: workoutResponse.workout!.exerciceList!),
+          StartWorkout(workout: workoutResponse.workout!, exercicesList: workoutResponse.workout!.exerciceList!),
+          ShowWater(waterQty: workoutResponse.workout!.waterQty)
+        ],
+      ),
     );
   }
 }
@@ -36,7 +40,9 @@ class StartWorkout extends StatelessWidget {
   Widget build(BuildContext context) {
     return (!utils.isWorkoutOngoing(workout) && exercicesList.isNotEmpty)
         ? TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              context.read<OngoingWorkoutCubit>().startWorkout(workout);
+            },
             icon: Icon(Icons.web),
             label: const Text(
               'Start Workout',
